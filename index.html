@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlackJack</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/CSS/style.css">
+    
+</head>
+<body>
+    <header class="titulo">
+        <h1>BlackJack</h1>
+    </header>
+    <div class="row mt-2">
+        <div class="col text-center">
+            <button id='btnNewGame' class="btn btn-danger">New Game</button>
+            <button id="btnNewTag" class="btn btn-primary">New Tag</button>
+            <button id="btnStop" class="btn btn-primary">Stop</button>
+        </div>
+    </div>
+<section>
+    <div id="player" class="row container">
+        <div class="col">
+            <h1>jugador 1 - <small class="cards-sum">0</small></h1>
+            <div id="jugador-cartas">
+           
+            </div>
+            <h2>Games Won - <small class="score">0</small></h2>
+        </div>
+    </div>
+    <div id="cpu" class="row container mt-2">
+        <div class="col">
+            <h1>CPU - <small class="cards-sum">0</small></h1>
+            <div id="cpu-cartas">
+                
+            </div>
+            <h2>Games Won - <small class="score">0</small></h2>
+        </div>
+    </div>
+</section>
+    <script src="assets/js/underscore-min.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

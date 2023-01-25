@@ -1,0 +1,35 @@
+
+html,body {
+    margin: 0px;
+    background-color: #2F4F30;
+    color:white;
+}
+section{
+    display: flex;
+    align-items: flex-start;
+}
+.titulo {
+    text-align: center;
+    background-color: #080707;
+    color:white;
+    padding: 25px;
+    font-size: 20px;
+}
+.carta{
+    position: relative;
+    width: 125px;
+    left: 100px;
+    margin-left: -60px;
+}
+#player{
+    margin-top: 10px;
+    margin: auto;
+}
+#cpu{
+    float: right;
+    margin-top: 10px;
+    margin: auto;
+}
+#jugador-cartas, #cpu-cartas{
+    height: 200px;
+}
