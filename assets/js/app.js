@@ -2,24 +2,32 @@
 (()=>{
     'use strict'
     let mazo    = [];
-    const tipos = ['C','D','H','S'];
-    const letras= ['J','Q','K','A'];
-    let playerPoints = 0;
-    let cpuPoints = 0;
-    let playerScore = 0;
-    let cpuScore = 0;
+    const tipos = ['C','D','H','S'],
+          letras= ['J','Q','K','A'];
+    let playersPoints=[],
+        playerScore = 0,
+        cpuScore = 0;
     //Referencia del HTML
-    const btnNewTag = document.querySelector('#btnNewTag');
-    const btnStop = document.querySelector('#btnStop');
-    const btnNewGame= document.querySelector('#btnNewGame');
-    const cardsPlayer= document.querySelector('#jugador-cartas');
-    const cardsCPU= document.querySelector('#cpu-cartas');
-    const points= document.querySelectorAll('.cards-sum');
-    const score= document.querySelectorAll('.score');
-    const startGame =()=>{
-        mazo=crearDeck();
+    const btnNewTag = document.querySelector('#btnNewTag'),
+          btnStop = document.querySelector('#btnStop'),
+          btnNewGame= document.querySelector('#btnNewGame');
+
+    const divCards=document.querySelectorAll('.divCards'),
+          points= document.querySelectorAll('.cards-sum'),
+          score= document.querySelectorAll('.score');
+    //Iniciar Juego
+    const startGame =(players=2)=>{
+        mazo=barajarMazo();
+        playersPoints=[];
+        for(let i =0;i<players;i++){
+            playersPoints.push(0);
+        }
+        points.forEach(elem=>elem.innerText=0);
+        divCards.forEach(elem=>elem.innerHTML='');
+        btnNewTag.disabled=false;
+        btnStop.disabled=false;
     }
-    const crearDeck = () =>{
+    const barajarMazo = () =>{
         mazo=[];
         for (let i = 2; i<=10; i++){
             for(let tipo of tipos){
@@ -43,18 +51,21 @@
         const valor = carta.substring(0, carta.length-1);
         return (isNaN(valor))? (valor==='A')? 11:10:valor*1;
     }
-    // CPU try
-    const turnCPU = (puntosMinimos)=>{
-        do{
-            const carta= pedirCarta();
-            cpuPoints=cpuPoints + valorCarta(carta);
-            points[1].innerText=cpuPoints;
+    // CPU try, el ultimo indice del arreglo corresponde a la CPU
+    const cardsAcum= (carta,turn)=>{
+            playersPoints[turn]=playersPoints[turn] + valorCarta(carta);
+            points[turn].innerText=playersPoints[turn];
+            return playersPoints[turn];
+    }
+    const newCard=(carta,turn)=>{
             const cardImg = document.createElement('img');
             cardImg.src=`assets/cartas/${carta}.png`;//Direccion de la carta en nuestra carpeta
             cardImg.classList.add('carta');//agregamos las propiedades del CSS
-            cardsCPU.append(cardImg);
+            divCards[turn].append(cardImg);
+    }
 
-        }while((cpuPoints<=puntosMinimos)&&(puntosMinimos <=21) );
+    const whoIsWinner =()=>{
+        const [puntosMinimos,cpuPoints]=playersPoints;
         setTimeout(()=>{
             if (cpuPoints === puntosMinimos){
                 alert('EMPATE');
@@ -72,17 +83,26 @@
                 alert('CPU wins');
             }
         },5);
-        
+    }
+
+    const turnCPU = (puntosMinimos)=>{
+        let cpuPoints=0;
+        do{
+            const carta= pedirCarta();
+            cpuPoints= cardsAcum(carta,playersPoints.length-1);
+            newCard(carta,playersPoints.length-1);
+
+        }while((cpuPoints<=puntosMinimos)&&(puntosMinimos <=21) );
+
+        whoIsWinner();                
     }
     //eventos
     btnNewTag.addEventListener('click', ()=>{
         const carta= pedirCarta();
-        playerPoints=playerPoints + valorCarta(carta);
-        points[0].innerText=playerPoints;
-        const cardImg = document.createElement('img');
-        cardImg.src=`assets/cartas/${carta}.png`;//Direccion de la carta en nuestra carpeta
-        cardImg.classList.add('carta');//agregamos las propiedades del CSS
-        cardsPlayer.append(cardImg);
+        const playerPoints = cardsAcum(carta,0);
+
+        newCard(carta,0);
+
         if(playerPoints > 21){
             btnNewTag.disabled = true;
             btnStop.disabled=true;
@@ -97,20 +117,11 @@
     btnStop.addEventListener('click', ()=>{
         btnNewTag.disabled=true;
         btnStop.disabled=true;
-        turnCPU(playerPoints);
+        turnCPU(playersPoints[0]);
         
     })
     btnNewGame.addEventListener('click',()=>{
         startGame();
-        playerPoints = 0;
-        cpuPoints = 0;
-        points[0].innerText = 0;
-        points[1].innerText = 0;
-        cardsPlayer.innerHTML='';
-        cardsCPU.innerHTML='';
-        btnNewTag.disabled=false;
-        btnStop.disabled=false;
-
     })
 
 })();
